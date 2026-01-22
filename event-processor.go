@@ -52,8 +52,8 @@ import (
 )
 
 const (
-	AppBy      = "JSON-from-iCal by goratomasz@outlook.com"
-	AppVersion = "1.2.0"
+	AppBy      = "JSON-from-iCal by github.com/tom-gora"
+	AppVersion = "1.0.0"
 )
 
 type logType struct {
@@ -159,7 +159,7 @@ func getIfExists(e *ics.VEvent, p ics.ComponentProperty) string {
 }
 
 // parse ical event raw text to struct
-func rawToStructEvent(e *ics.VEvent) calendarEvent {
+func rawToStructEvent(e *ics.VEvent, now time.Time) calendarEvent {
 	uid := getIfExists(e, ics.ComponentPropertyUniqueId)
 	start := getIfExists(e, ics.ComponentPropertyDtStart)
 	actualEnd := getIfExists(e, ics.ComponentPropertyDtEnd)
@@ -182,9 +182,9 @@ func rawToStructEvent(e *ics.VEvent) calendarEvent {
 	return calendarEvent{
 		UID:         uid,
 		Start:       start,
-		HumanStart:  dateStrToHuman(start),
+		HumanStart:  dateStrToHuman(start, now),
 		End:         actualEnd,
-		HumanEnd:    dateStrToHuman(actualEnd),
+		HumanEnd:    dateStrToHuman(actualEnd, now),
 		ActualEnd:   actualEnd,
 		Summary:     summary,
 		Location:    location,
@@ -224,7 +224,7 @@ func zeroOutTimeFromDate(t time.Time) time.Time {
 
 // format for notification - hardcoded to something akin:
 // [ FRI ] 09 Jul 2021 @ 10:00 - TOMORROW !
-func dateStrToHuman(str string) string {
+func dateStrToHuman(str string, now time.Time) string {
 	if len(str) < 1 {
 		return ""
 	}
@@ -235,7 +235,6 @@ func dateStrToHuman(str string) string {
 	day := strings.ToUpper(t.Format("Mon"))
 	rest := t.Format("02 Jan 2006 @ 15:04")
 
-	now := time.Now()
 	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 	tomorrow := today.AddDate(0, 0, 1)
 	if t.Year() == today.Year() && t.Month() == today.Month() && t.Day() == today.Day() {
@@ -311,12 +310,24 @@ func parseCalendarsConfig(p string) ([]string, error) {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
-		if line == "" || strings.HasPrefix(line, "#") {
-			continue
+		// Whitelist: Must be a URL or a valid local file
+		isURL := strings.HasPrefix(line, "http://") || strings.HasPrefix(line, "https://")
+		if isURL || isValidFile(line) {
+			uris = append(uris, expandTilde(line))
 		}
-		uris = append(uris, expandTilde(line))
 	}
 	return uris, scanner.Err()
+}
+
+// shouldIncludeEvent determines if an event should be included based on the window
+func shouldIncludeEvent(dtStart, dtEnd, windowStart, windowEnd time.Time) (keep bool, ongoing bool) {
+	if dtEnd.Before(windowStart) || dtStart.After(windowEnd) {
+		return false, false
+	}
+	if dtStart.Before(windowStart) {
+		return true, true
+	}
+	return true, false
 }
 
 func processSource(r io.Reader, today time.Time, c execConf) []calendarEvent {
@@ -336,20 +347,19 @@ func processSource(r io.Reader, today time.Time, c execConf) []calendarEvent {
 	windowEnd := windowStart.AddDate(0, 0, c.UpcomingDays).Add(24 * time.Hour).Add(-time.Second)
 
 	for _, e := range cal.Events() {
-		event := rawToStructEvent(e)
+		event := rawToStructEvent(e, today)
 		dtStart := rawToStructDate(event.Start)
 		dtEnd := rawToStructDate(event.End)
 		if dtEnd.IsZero() {
 			dtEnd = dtStart
 		}
 
-		// Check if event is within window
-		if dtEnd.Before(windowStart) || dtStart.After(windowEnd) {
+		keep, ongoing := shouldIncludeEvent(dtStart, dtEnd, windowStart, windowEnd)
+		if !keep {
 			continue
 		}
 
-		// Check if ongoing
-		if dtStart.Before(windowStart) {
+		if ongoing {
 			event.Ongoing = true
 			event.Description = "Ongoing\n\n" + event.Description
 		}
@@ -498,7 +508,7 @@ func main() {
 		Log.EnableDebug()
 	}
 
-	var allEvents []calendarEvent
+	allEvents := []calendarEvent{}
 	now := time.Now()
 
 	if conf.CalendarsConfigPath != "" {
@@ -508,12 +518,6 @@ func main() {
 		}
 
 		for _, uri := range uris {
-			// Negative Pattern: Silently skip if neither URL nor valid file
-			isURL := strings.HasPrefix(uri, "http://") || strings.HasPrefix(uri, "https://")
-			if !isURL && !isValidFile(uri) {
-				continue
-			}
-
 			Log.Info.Printf("processing source: %s", uri)
 			rc, err := fetchSource(uri)
 			if err != nil {
