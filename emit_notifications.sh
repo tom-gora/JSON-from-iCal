@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+DAYS_LIMIT="$1"
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+PROCESSOR_BIN="$SCRIPT_DIR/event-processor"
+CALENDARS_CONF_FILE="$SCRIPT_DIR/calendars.conf"
+
+RAW_JSON_ARR=$("$PROCESSOR_BIN" -u "$DAYS_LIMIT" -c "$CALENDARS_CONF_FILE")
+
+echo "$RAW_JSON_ARR" | jq -c '.[]' | while read -r obj_row; do
+
+  HEADER=$(echo "$obj_row" | jq -r ". | .HumanStart")
+  BODY="$(echo "$obj_row" | jq -r ". | .Summary")\n\n$(echo "$obj_row" | jq -r ". | .Description")"
+
+  notify-send "$HEADER" "$BODY" -u normal -t 10000
+  sleep 0.25 #stagger
+
+done
+
+exit 0
