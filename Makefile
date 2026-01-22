@@ -1,4 +1,4 @@
-BINARY_NAME := cal-event-notifier
+BINARY_NAME := jfi
 BUILD_DIR := bin
 
 .PHONY: all build test_unit test_emit test_validate test_limit test_file test_lookahead test_pipeline test_config test_info test_all clean
@@ -17,7 +17,7 @@ test_unit:
 
 test_emit: build
 	@echo "Running Emit Test..."
-	@cd test_data && ./test_emit_notifications.sh 5
+	@cd test_data && ./test_emit_notifications.sh 10
 	@$(MAKE) clean
 
 test_validate: build

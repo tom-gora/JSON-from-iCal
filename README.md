@@ -36,7 +36,7 @@ This project was a fork of `jceaser/readical`, but has undergone a lot of change
 make build
 ```  
 
-The binary is written to `bin/cal-event-notifier`.  
+The binary is written to `bin/jfi`. Place it in your `$PATH` according to your preference.  
 
 ### Testing
 
