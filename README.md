@@ -12,11 +12,7 @@ It does basic filtering, arithmetic and string formatting (to my liking, at this
 
 ### Personal use case for making this: System Notifications
 
-
-
-https://github.com/user-attachments/assets/c7ebcd2e-cd63-4ae6-b7cd-5353064a8db4
-
-
+https://github.com/user-attachments/assets/09cd5410-273d-4fce-bcae-103caa3e3eba
 
 While the binary is general-purpose, this repository includes an auxiliary pipeline (a small shell script using `jq` to process output and pipe data into `notify-send`) for a specific desktop use case: **System Notifications**. (Note: Project is personal and any scripts are reference impl)  
 
