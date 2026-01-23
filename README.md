@@ -21,7 +21,7 @@ It does basic filtering, arithmetic and string formatting (to my liking, at this
 
 https://github.com/user-attachments/assets/09cd5410-273d-4fce-bcae-103caa3e3eba  
 
-While the binary is general-purpose, this repository includes an auxiliary pipeline (a small shell script using `jq` to process output and pipe data into `notify-send`) for a specific desktop use case: **System Notifications**. (Note: Project is personal and any scripts are reference impl)  
+While the binary is general-purpose, this repository includes an auxiliary pipeline (a small shell script using `jq` to process output and pipe data into `notify-send`) for a specific desktop use case: **System Notifications**. (Note: Project is personal and any scripts are just a reference implementation)  
 
 ## Key Features
 
