@@ -1,5 +1,5 @@
-<p align="center">  
-  <img width="80%" src="./assets/header.svg" alt="header"><br>  
+<p disabled align="center">  
+  <img disabled width="80%" src="./assets/header.svg" alt="header"><br>  
 </p>
 
 ![fun-with-skeumorphics](./assets/image.png)  
