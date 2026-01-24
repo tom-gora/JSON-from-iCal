@@ -2,7 +2,7 @@
 
 DAYS_LIMIT="$1"
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
-PROCESSOR_BIN="$SCRIPT_DIR/event-processor"
+PROCESSOR_BIN="$SCRIPT_DIR/bin/jfi"
 CALENDARS_CONF_FILE="$SCRIPT_DIR/calendars.conf"
 
 RAW_JSON_ARR=$("$PROCESSOR_BIN" -u "$DAYS_LIMIT" -c "$CALENDARS_CONF_FILE")

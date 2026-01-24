@@ -1,9 +1,11 @@
-package main
+package ical
 
 import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/tom-gora/JSON-from-iCal/internal/common"
 )
 
 func TestRawToStructDate(t *testing.T) {
@@ -19,9 +21,9 @@ func TestRawToStructDate(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		got := rawToStructDate(tt.input)
+		got := StrToStructDate(tt.input)
 		if !got.Equal(tt.expected) {
-			t.Errorf("rawToStructDate(%q) = %v, want %v", tt.input, got, tt.expected)
+			t.Errorf("StrToStructDate(%q) = %v, want %v", tt.input, got, tt.expected)
 		}
 	}
 }
@@ -43,11 +45,11 @@ func TestDateStrToHuman(t *testing.T) {
 	}{
 		{"20260122T140000", "TODAY ‼️"},
 		{"20260123T100000", "TOMORROW ❗"},
-		{"20260124T100000", "[ SAT ] 24 Jan 2026 @ 10:00"},
+		{"20260124T100000", "[ Sat ] 24 Jan 2026"},
 	}
 
 	for _, tt := range tests {
-		got := dateStrToHuman(tt.input, now)
+		got := dateStrToHuman(tt.input, common.DefDateTemplate, now)
 		if !strings.Contains(got, tt.contains) {
 			t.Errorf("dateStrToHuman(%q, now) = %q, should contain %q", tt.input, got, tt.contains)
 		}

@@ -11,5 +11,6 @@ require (
 require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
+	gitlab.com/metakeule/fmtdate v1.2.2 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 )

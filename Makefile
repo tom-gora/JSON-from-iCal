@@ -8,7 +8,7 @@ all: build
 build:
 	@mkdir -p $(BUILD_DIR)
 	@echo "Building $(BINARY_NAME)..."
-	@go build -o $(BUILD_DIR)/$(BINARY_NAME) JSON-from-iCal.go
+	@go build -o $(BUILD_DIR)/$(BINARY_NAME) cmd/JSON-from-iCal/main.go
 	@echo "Build complete: $(BUILD_DIR)/$(BINARY_NAME)"
 
 test_unit:
@@ -37,7 +37,7 @@ test_file: build
 
 test_lookahead: build
 	@echo "Running Number of Lookahead Days Test..."
-	@cd test_data && ./test_lookahead.js
+	@./test_data/test_lookahead.sh
 	@$(MAKE) clean
 
 test_pipeline: build
@@ -62,7 +62,7 @@ test_all: build
 	@cd test_data && ./test_validate_json.sh 7
 	@cd test_data && ./test_limit_events.sh
 	@cd test_data && ./test_file_output.sh
-	@cd test_data && ./test_lookahead.js
+	@./test_data/test_lookahead.sh
 	@cd test_data && ./test_pipeline.sh
 	@cd test_data && ./test_config_junk.sh
 	@cd test_data && ./test_info_flags.sh
