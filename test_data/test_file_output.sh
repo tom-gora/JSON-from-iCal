@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 SCRIPT_PARENT_DIR=$(cd -- "$SCRIPT_DIR/.." &>/dev/null && pwd)
-CALENDARS_CONF_FILE="$SCRIPT_DIR/test_calendars.conf"
+CALENDARS_CONF_FILE="$SCRIPT_DIR/test_config.json"
 TEST_OUT_FILE="$SCRIPT_DIR/test_output.json"
 
 # Cleanup from previous runs

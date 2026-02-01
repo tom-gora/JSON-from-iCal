@@ -1,7 +1,12 @@
 # If you prefer the allow list template instead of the deny list, see community template:
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+
+**/.DS_Store
+**/Thumbs.db
 #
 # Binaries for programs and plugins
+/bin/
+jfi
 *.exe
 *.exe~
 *.dll
@@ -20,7 +25,14 @@
 # Go workspace file
 go.work
 
-./jfi
 blog
 out/
 
+**/.astro/
+**/.vscode*
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/node_modules/
+**/dist/
+**/*.env

@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-neo-pink: #E191B8;
+  --color-neo-purple: #7A4C63;
+  --color-neo-dark: #2D292E;
+  
+  --shadow-neo: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-neo-lg: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+
+  --animate-slide-in-right: slide-in-right 0.3s ease-out;
+  --animate-slide-out-right: slide-out-right 0.3s ease-in forwards;
+
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-out-right {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+}
+
+/* Force pitch black borders and shadows for both themes */
+.neo-border {
+  border-width: 4px;
+  border-color: black !important;
+}
+
+.neo-shadow {
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+}
+
+.neo-shadow-lg {
+  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1) !important;
+}
+
+.neo-button {
+  @apply px-6 py-3 font-black uppercase tracking-wider active:translate-x-1 active:translate-y-1 active:shadow-none transition-all;
+  border-width: 4px;
+  border-color: black !important;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+}
+
+.neo-input {
+  @apply px-4 py-2 bg-white text-black dark:bg-neo-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-neo-pink;
+  border-width: 4px;
+  border-color: black !important;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+}
+
+body {
+  @apply bg-neo-pink text-black dark:bg-neo-dark dark:text-white transition-colors duration-200 overflow-x-hidden;
+  font-family: 'Inter', sans-serif;
+}

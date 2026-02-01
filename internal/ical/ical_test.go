@@ -4,8 +4,6 @@ import (
 	"strings"
 	"testing"
 	"time"
-
-	"github.com/tom-gora/JSON-from-iCal/internal/common"
 )
 
 func TestRawToStructDate(t *testing.T) {
@@ -49,7 +47,7 @@ func TestDateStrToHuman(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		got := dateStrToHuman(tt.input, common.DefDateTemplate, now)
+		got := dateStrToHuman(tt.input, "[ DDD ] DD MMM YYYY", now)
 		if !strings.Contains(got, tt.contains) {
 			t.Errorf("dateStrToHuman(%q, now) = %q, should contain %q", tt.input, got, tt.contains)
 		}

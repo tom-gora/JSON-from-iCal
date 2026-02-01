@@ -3,9 +3,11 @@
 DAYS_LIMIT="$1"
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 PROCESSOR_BIN="$SCRIPT_DIR/bin/jfi"
-CALENDARS_CONF_FILE="$SCRIPT_DIR/calendars.conf"
 
-RAW_JSON_ARR=$("$PROCESSOR_BIN" -u "$DAYS_LIMIT" -c "$CALENDARS_CONF_FILE")
+# remove when using build binary
+make build
+
+RAW_JSON_ARR=$("$PROCESSOR_BIN" -u "$DAYS_LIMIT")
 
 echo "$RAW_JSON_ARR" | jq -c '.[]' | while read -r obj_row; do
 
@@ -16,5 +18,8 @@ echo "$RAW_JSON_ARR" | jq -c '.[]' | while read -r obj_row; do
   sleep 0.25 #stagger
 
 done
+
+# remove when using build binary
+make clean
 
 exit 0

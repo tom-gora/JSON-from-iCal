@@ -1,8 +1,8 @@
 <p aria-label="JSON-from-iCal" disabled align="center">  
-  <img disabled width="90%" src="./assets/header.svg" alt="JSON-from-iCal"><br>  
+  <img disabled width="90%" src="./_assets/header.svg" alt="JSON-from-iCal"><br>  
 </p>
 
-![fun-with-skeumorphics](./assets/image.png)  
+![fun-with-skeumorphics](./_assets/image.png)  
 <br><br>
 
 **JSON-from-iCal just produces JSON with your upcoming calendar events. Nothing more. UNIX philosphy. Period.**
@@ -17,7 +17,7 @@ It does basic filtering, arithmetic and string formatting (to my liking, at this
 
 **Personal use case for making this: System Notifications**
 
-https://github.com/user-attachments/assets/09cd5410-273d-4fce-bcae-103caa3e3eba
+https://github.com/user-attachments/_assets/09cd5410-273d-4fce-bcae-103caa3e3eba
 
 While the binary is general-purpose, this repository includes an auxiliary pipeline (a small shell script using `jq` to process output and pipe data into `notify-send`) for a specific desktop use case: **System Notifications**. (Note: Project is personal and any scripts are just a reference implementation)
 
@@ -25,18 +25,14 @@ While the binary is general-purpose, this repository includes an auxiliary pipel
 
 - **Standardized Schema**: Enforced thanks to go's first-class-citizen (almost JS level) json handling.
 - **Flexible Ingestion**: Supports local `.ics` files, remote `http/https` URLs, and direct `stdin` piping.
-- **Noise Reduction**: Automatically filters out iCal clutter (e.g., `X-APPLE-` metadata). Gets you readable event data in no-time.
 
 ## Usage
 
-`jfi` operates in two primary modes: **Stdin** and **Config**.
+`jfi` automatically detects its input mode based on whether data is being piped to it.
 
-- **Input Default**: If no `--config` is provided, the tool reads from `stdin`.
-- **Output Default**: If no `--file` is provided, the tool writes to `stdout`.
+### 1. Stdin Mode is Primary Mode
 
-### 1. Stdin Mode
-
-Pipe iCal data directly into the tool when scripting.
+If data is piped via **Stdin**, `jfi` processes it and ignores any calendars defined in the configuration file. Good for scripting.
 
 ```bash
 cat calendar.ics | ./bin/jfi
@@ -44,68 +40,101 @@ cat calendar.ics | ./bin/jfi
 
 ### 2. Config Mode
 
-Pass a simple configuration file containing paths to local `.ics` files or remote URLs (one per line):
+If no data is detected on **Stdin**, `jfi` looks for calendars in its configuration file.
 
-```
-# comments allowed
-~/path/to/local/calendar.ics
+Pass a JSON configuration file containing paths to local `.ics` files or remote URLs:
 
-https://remote-resource.com/fetch-me.ics
+```json
+{
+  "calendars": [
+    "~/path/to/local/calendar.ics",
+    "https://remote-resource.com/fetch-me.ics"
+  ],
+  "upcoming_days": 7,
+  "events_limit": 0
+}
 ```
 
 ```bash
-./bin/jfi --config calendars.conf
+./bin/jfi --config config.json
 ```
+
+**Persistence**: Default config path is `$XDG_CONFIG_HOME/jfi/config.json` (falls back to `~/.config/jfi/config.json`). If the file does not exist, `jfi` will create it with default values on the first run.
+
+#### Default `config.json` Structure
+
+When bootstrapped, your configuration will look like this:
+
+```json
+{
+  "calendars": [],
+  "upcoming_days": 7,
+  "events_limit": 0,
+  "output_file": "",
+  "date_template": "YYYY MMM DD"
+}
+```
+
+| Key             | Description                                                                                                                                                     |
+| :-------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `calendars`     | An array of strings (URLs or local file paths) to process.                                                                                                      |
+| `upcoming_days` | Number of days from today to look ahead.                                                                                                                        |
+| `events_limit`  | Max number of total events to return (0 = unlimited).                                                                                                           |
+| `output_file`   | Default path to where write output if you need it written into a file. Omit it / use `"stdout"` or `""` to explicitly set default print to stdout as behaviour. |
+| `date_template` | Template the format of your choice of how to show dates.                                                                                                        |
+
+#### Customizing Date Templates
+
+`jfi` uses the [fmtdate](https://gitlab.com/metakeule/fmtdate) library for date formatting. You can change how your dates look by modifying the `date_template` in your config or using the `-t` flag.
+
+**Common Placeholders:**
+
+| Placeholder | Meaning             | Example    |
+| :---------- | :------------------ | :--------- |
+| `YYYY`      | 4-digit year        | `2026`     |
+| `MM`        | Month (numeric)     | `02`       |
+| `MMM`       | Month (short name)  | `Feb`      |
+| `MMMM`      | Month (full name)   | `February` |
+| `DD`        | Day of month        | `01`       |
+| `D`         | Day of month (lean) | `1`        |
+| `DDD`       | Day of week (short) | `Sun`      |
+| `DDDD`      | Day of week (full)  | `Sunday`   |
+| `hh`        | Hour (24h)          | `14`       |
+| `mm`        | Minutes             | `05`       |
+
+_Note: Any characters not matching placeholders (like `[ ]`, `/`, or `-`) are preserved as-is._
 
 ### CLI Flags
 
-| Flag              | Short | Default  | Description                           |
-| :---------------- | :---- | :------- | :------------------------------------ |
-| `--upcoming-days` | `-u`  | `7`      | Days ahead to look for events         |
-| `--limit`         | `-l`  | `0`      | Max number of events (0 = unlimited)  |
-| `--file`          | `-f`  | `stdout` | Output file path (see Priority Logic) |
-| `--config`        | `-c`  | `""`     | Path to calendars configuration file  |
-| `--verbose`       | `-v`  | `false`  | Enable detailed logging (! WIP !)     |
-| `--version`       | `-V`  | `false`  | Show version information              |
+| Flag              | Short | Default  | Description                                                |
+| :---------------- | :---- | :------- | :--------------------------------------------------------- |
+| `--upcoming-days` | `-u`  | `7`      | Days ahead to look for events                              |
+| `--limit`         | `-l`  | `0`      | Max number of events (0 = unlimited)                       |
+| `--output-file`   | `-f`  | `stdout` | Output file (literal "stdout" or empty for priority logic) |
+| `--config`        | `-c`  | `""`     | Path to custom config.json                                 |
+| `--template`      | `-t`  | `""`     | Template string for output dates                           |
+| `--verbose`       | `-v`  | `false`  | Enable detailed logging                                    |
+| `--version`       | `-V`  | `false`  | Show version information                                   |
 
 ### Example
 
-Without the `-f`/`--file` flag, the tool outputs JSON to `stdout`:
+Without an explicit output file, the tool defaults to its internal priority logic (or `stdout` if unconfigured):
 
 ```bash
-./bin/jfi -u 2 -l 1 -c ./test_data/test_calendars.conf | jq
-```
-
-Output:
-
-```json
-[
-  {
-    "UID": "bday-charlie",
-    "Start": "20260124",
-    "HumanStart": "[ SAT ] 24 Jan 2026 @ 00:00",
-    "End": "20260125",
-    "HumanEnd": "[ SUN ] 25 Jan 2026 @ 00:00",
-    "ActualEnd": "20260125",
-    "Summary": "Charlie's Birthday",
-    "Location": "",
-    "Description": "",
-    "Hours": 24,
-    "SubDay": false,
-    "Day": true,
-    "MultiDay": false,
-    "Ongoing": false
-  }
-]
+./bin/jfi -u 2 -l 1 -c ./test_data/test_config.json | jq
 ```
 
 ### Output Priority Logic
 
-When the `--file` flag is provided without a value (e.g., `./jfi -f`), the tool determines the output path in this order:
+`jfi` resolves the output destination using a 4-step priority cascade:
 
-1. `$XDG_CACHE_HOME/event-notifications/out.json`
-2. `$HOME/.cache/event-notifications/out.json`
-3. `./out/out.json`
+1.  **Explicit Flag**: If `-f/--output-file` is used, that value wins. (Literal `"stdout"` forces terminal output).
+2.  **Config File**: If no flag is used, the `output_file` key in `config.json` is checked.
+3.  **XDG Priority Logic**: If both are empty, the tool falls back to:
+    - `$XDG_CACHE_HOME/event-notifications/out.json`
+    - `$HOME/.cache/event-notifications/out.json`
+    - `./out/out.json`
+4.  **Terminal Fallback**: If no path is resolvable, it defaults to `stdout`.
 
 ## Build and Testing
 

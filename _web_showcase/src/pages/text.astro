@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { TextInputForm } from '../components/TextInputForm';
+---
+
+<Layout title="Paste Text // jfi">
+  <div class="py-6">
+    <a href="/" class="neo-button inline-block mb-12 bg-white dark:bg-neo-purple">← Back Home</a>
+    <TextInputForm client:load />
+  </div>
+</Layout>

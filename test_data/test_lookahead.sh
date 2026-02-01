@@ -2,7 +2,7 @@
 
 # Configuration
 BINARY="./bin/jfi"
-CONFIG="test_data/test_calendars.conf"
+CONFIG="test_data/test_config.json"
 FAILED=0
 
 # Colors for output
@@ -23,7 +23,7 @@ run_test() {
     local end_ts=$(date -d "$base_date + $((days + 1)) days - 1 second" +%s)
 
     # Run jfi and use jq to validate every event
-    local output=$($BINARY -u "$days" -c "$CONFIG" 2>/dev/null)
+    local output=$($BINARY -u "$days" -c "$CONFIG" -f stdout 2>/dev/null)
     
     if [ $? -ne 0 ]; then
         echo -e "${RED}FAILED (Binary exited with error)${NC}"

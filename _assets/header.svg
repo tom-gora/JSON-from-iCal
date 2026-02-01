@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="150.317mm"
+   height="20.879mm"
+   viewBox="0 0 150.317 20.879"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="header.svg"
+   inkscape:version="1.4.3 (0d15f75042, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="1.5489488"
+     inkscape:cx="241.13128"
+     inkscape:cy="67.78791"
+     inkscape:window-width="1910"
+     inkscape:window-height="1044"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient1">
+      <stop
+         style="stop-color:#e191b8;stop-opacity:1;"
+         offset="0.24765626"
+         id="stop1" />
+      <stop
+         style="stop-color:#7a4c63;stop-opacity:1;"
+         offset="0.74781495"
+         id="stop6" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient1"
+       id="linearGradient2"
+       x1="23.081812"
+       y1="3.4202511"
+       x2="110.45477"
+       y2="47.938999"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1692895,0,0,1.1692895,-17.017396,-4.2490154)" />
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(14.056327,-15.952997)">
+    <g
+       id="g8">
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.1212px;line-height:0;font-family:Poppins;-inkscape-font-specification:Poppins;text-align:end;word-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:end;fill:#000000;fill-opacity:1;stroke:#da614c;stroke-width:1.34454;paint-order:markers stroke fill"
+         x="117.92809"
+         y="35.705948"
+         id="text1-1"><tspan
+           id="tspan1-2"
+           x="117.92809"
+           y="35.705948"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.1212px;font-family:'Fjalla One';-inkscape-font-specification:'Fjalla One, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.34454">JSON-from-iCal</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.1212px;line-height:0;font-family:Poppins;-inkscape-font-specification:Poppins;text-align:end;word-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:end;fill:url(#linearGradient2);stroke:#da614c;stroke-width:1.34454;paint-order:markers stroke fill"
+         x="118.91706"
+         y="34.568218"
+         id="text1"><tspan
+           id="tspan1"
+           x="118.91706"
+           y="34.568218"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:19.1212px;font-family:'Fjalla One';-inkscape-font-specification:'Fjalla One, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:url(#linearGradient2);stroke:none;stroke-width:1.34454">JSON-from-iCal</tspan></text>
+    </g>
+  </g>
+</svg>

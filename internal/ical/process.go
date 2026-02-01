@@ -10,7 +10,7 @@ import (
 	"time"
 
 	ics "github.com/arran4/golang-ical"
-	"github.com/tom-gora/JSON-from-iCal/internal/common"
+	fu "github.com/tom-gora/JSON-from-iCal/internal/fileutil"
 	l "github.com/tom-gora/JSON-from-iCal/internal/logger"
 )
 
@@ -53,15 +53,16 @@ func FetchSource(uri string) (io.ReadCloser, error) {
 		return resp.Body, nil
 	}
 
-	if common.IsValidFile(uri) {
-		return os.Open(common.PathExpandTilde(uri))
+	expandedPath := fu.PathExpandTilde(uri)
+	if info, err := os.Stat(expandedPath); err == nil && !info.IsDir() {
+		return os.Open(expandedPath)
 	}
 
 	return nil, fmt.Errorf("invalid source: %s", uri)
 }
 
 func ProcessSourceToStruct(r io.Reader, today time.Time, t string, u int) []CalendarEvent {
-	var events []CalendarEvent
+	events := []CalendarEvent{}
 
 	// Apply X-APPLE- filtering
 	pr, pw := io.Pipe()
@@ -76,13 +77,11 @@ func ProcessSourceToStruct(r io.Reader, today time.Time, t string, u int) []Cale
 	windowStart := zeroOutTimeFromDate(today)
 	windowEnd := windowStart.AddDate(0, 0, u).Add(24 * time.Hour).Add(-time.Second)
 
+	totalEvents := len(cal.Events())
 	for _, e := range cal.Events() {
 		event := strToStructEvent(e, t, today)
-		dtStart := StrToStructDate(event.Start)
-		dtEnd := StrToStructDate(event.End)
-		if dtEnd.IsZero() {
-			dtEnd = dtStart
-		}
+		dtStart := time.Unix(event.UnixStart, 0)
+		dtEnd := time.Unix(event.UnixEnd, 0)
 
 		keep, ongoing := shouldIncludeEvent(dtStart, dtEnd, windowStart, windowEnd)
 		if !keep {
@@ -96,5 +95,7 @@ func ProcessSourceToStruct(r io.Reader, today time.Time, t string, u int) []Cale
 
 		events = append(events, event)
 	}
+
+	l.Log.Debug.Printf("Processed calendar: found %d events, kept %d within window", totalEvents, len(events))
 	return events
 }

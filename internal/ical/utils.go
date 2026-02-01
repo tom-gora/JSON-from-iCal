@@ -14,6 +14,11 @@ import (
 
 func filterStream(r io.Reader, w *io.PipeWriter, matchList []string) {
 	scanner := bufio.NewScanner(r)
+	// Increase buffer size to handle long iCal lines (up to 1MB)
+	const maxCapacity = 1024 * 1024
+	buf := make([]byte, 64*1024)
+	scanner.Buffer(buf, maxCapacity)
+
 	defer w.Close()
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -108,6 +113,10 @@ func strToStructEvent(e *ics.VEvent, t string, now time.Time) CalendarEvent {
 	location := getCalValueIfExists(e, ics.ComponentPropertyLocation)
 	description := getCalValueIfExists(e, ics.ComponentPropertyDescription)
 
+	if len(actualEnd) < 1 {
+		actualEnd = start
+	}
+
 	st := StrToStructDate(start)
 	et := StrToStructDate(actualEnd)
 	us := st.Unix()
@@ -117,10 +126,6 @@ func strToStructEvent(e *ics.VEvent, t string, now time.Time) CalendarEvent {
 	subDay := hours < 24
 	day := hours == 24
 	multiDay := 24 < hours
-
-	if len(actualEnd) < 1 {
-		actualEnd = start
-	}
 
 	return CalendarEvent{
 		UID:         uid,

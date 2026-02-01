@@ -2,10 +2,10 @@
 DAYS_LIMIT="${1:-7}"
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 SCRIPT_PARENT_DIR=$(cd -- "$SCRIPT_DIR/.." &>/dev/null && pwd)
-CALENDARS_CONF_FILE="$SCRIPT_DIR/test_calendars.conf"
+CALENDARS_CONF_FILE="$SCRIPT_DIR/test_config.json"
 
 echo "Validating JSON output..."
-RAW_JSON=$(cd "$SCRIPT_PARENT_DIR" && ./bin/jfi -u "$DAYS_LIMIT" -c "$CALENDARS_CONF_FILE")
+RAW_JSON=$(cd "$SCRIPT_PARENT_DIR" && ./bin/jfi -u "$DAYS_LIMIT" -c "$CALENDARS_CONF_FILE" -f stdout)
 
 # 1. Check if it's valid JSON
 if ! echo "$RAW_JSON" | jq -e . >/dev/null 2>&1; then

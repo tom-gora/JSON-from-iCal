@@ -2,10 +2,10 @@
 LIMIT=2
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 SCRIPT_PARENT_DIR=$(cd -- "$SCRIPT_DIR/.." &>/dev/null && pwd)
-CALENDARS_CONF_FILE="$SCRIPT_DIR/test_calendars.conf"
+CALENDARS_CONF_FILE="$SCRIPT_DIR/test_config.json"
 
 echo "Testing event limit flag (-l $LIMIT)..."
-RAW_JSON=$(cd "$SCRIPT_PARENT_DIR" && ./bin/jfi -l "$LIMIT" -c "$CALENDARS_CONF_FILE")
+RAW_JSON=$(cd "$SCRIPT_PARENT_DIR" && ./bin/jfi -l "$LIMIT" -c "$CALENDARS_CONF_FILE" -f stdout)
 
 COUNT=$(echo "$RAW_JSON" | jq 'length')
 if [ "$COUNT" -ne "$LIMIT" ]; then

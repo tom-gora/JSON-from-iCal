@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { UrlInputForm } from '../components/UrlInputForm';
+---
+
+<Layout title="Calendar URLs // jfi">
+  <div class="py-6">
+    <a href="/" class="neo-button inline-block mb-12 bg-white dark:bg-neo-purple">← Back Home</a>
+    <UrlInputForm client:load />
+  </div>
+</Layout>
