@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { ToastContainer } from '../components/ToastSystem';
+import ToastSystem from '../components/ToastSystem.svelte';
 
 interface Props {
 	title: string;
@@ -81,7 +81,7 @@ const darkSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
     <script is:inline>
       // Immediate execution to avoid FOUC
       (function() {
-        const theme = localStorage.getItem('theme') || 
+        const theme = localStorage.getItem('jfi_theme') || 
           (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         if (theme === 'dark') {
           document.documentElement.classList.add('dark');
@@ -92,11 +92,15 @@ const darkSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
     </script>
 	</head>
 	<body>
-    <ToastContainer client:load />
+    <ToastSystem client:load />
     <div class="min-h-screen flex flex-col">
-      <nav class="p-6 neo-border border-x-0 border-t-0 bg-neo-purple text-white dark:bg-neo-pink dark:text-black sticky top-0 z-50 flex justify-between items-center transition-colors">
-        <a href="/" class="text-2xl md:text-[3rem] font-black uppercase tracking-tighter">jfi  &nbsp;&nbsp;// &nbsp; &nbsp;web</a>
-        <div class="flex gap-4">
+      <nav class="w-full p-6 neo-border border-x-0 border-t-0 bg-neo-purple text-white dark:bg-neo-pink dark:text-black sticky top-0 z-50 flex justify-between items-center transition-colors">
+        <div class="flex w-full justify-between gap-4">
+          <button
+            class={`neo-button-sm !px-0 !py-0 items-center inline-block bg-white text-black dark:bg-neo-dark dark:text-white ${Astro.url.pathname === '/' ? 'opacity-0 pointer-events-none' : ''}`}>
+          <a class="grid items-center px-2 w-full h-full " href="/">← Back Home</a>
+          </button>
+          <a href="/" class="text-2xl md:text-[3rem] font-black uppercase tracking-tighter">JFI &nbsp;WEB &nbsp;DEMO &nbsp;//</a>
           <button 
             id="theme-toggle" 
             class="neo-button bg-white text-black dark:bg-neo-dark dark:text-white py-1 px-3 text-xl"
@@ -126,7 +130,7 @@ const darkSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
 
       themeToggle?.addEventListener("click", () => {
         const isDark = document.documentElement.classList.toggle("dark");
-        localStorage.setItem("theme", isDark ? "dark" : "light");
+        localStorage.setItem("jfi_theme", isDark ? "dark" : "light");
         updateIcon(isDark);
       });
     </script>

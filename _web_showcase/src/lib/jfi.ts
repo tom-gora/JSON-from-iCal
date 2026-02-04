@@ -23,18 +23,23 @@ export function runJfi(input: string | string[], options: JfiOptions = {}) {
     buildBinary();
   }
 
+  // Basic server-side validation
+  const upcomingDays = Math.max(0, options.upcomingDays || 7);
+  const limit = Math.max(0, options.limit || 0);
+  const template = (options.template || '').trim();
+
   const args: string[] = ['-f', 'stdout'];
-  if (options.upcomingDays) args.push('-u', options.upcomingDays.toString());
-  if (options.limit) args.push('-l', options.limit.toString());
-  if (options.template) args.push('-t', options.template);
+  args.push('-u', upcomingDays.toString());
+  args.push('-l', limit.toString());
+  if (template) args.push('-t', template);
 
   if (Array.isArray(input)) {
     // URL Mode: We must ignore stdin to prevent the binary from entering Stdin Mode
     const configPath = path.join(PROJECT_ROOT, '.tmp_web_config.json');
     const config = {
       calendars: input,
-      upcoming_days: options.upcomingDays || 7,
-      events_limit: options.limit || 0,
+      upcoming_days: upcomingDays,
+      events_limit: limit,
     };
     
     fs.writeFileSync(configPath, JSON.stringify(config));

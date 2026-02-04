@@ -1,0 +1,233 @@
+---
+const moonSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 30 30" {...props}>
+	<path fill="currentColor" d="M3.74 14.44c0-1.52.3-2.98.89-4.37s1.4-2.58 2.4-3.59s2.2-1.81 3.59-2.4s2.84-.89 4.37-.89s2.98.3 4.37.89s2.59 1.4 3.6 2.4s1.81 2.2 2.4 3.59s.89 2.84.89 4.37s-.3 2.98-.89 4.37s-1.4 2.59-2.4 3.6s-2.2 1.81-3.6 2.4s-2.85.89-4.37.89s-2.98-.3-4.37-.89s-2.58-1.4-3.59-2.4s-1.81-2.2-2.4-3.6s-.89-2.84-.89-4.37M15.15 4.39c1.83 3.22 2.74 6.57 2.74 10.05c0 4.16-.88 7.51-2.65 10.06c1.34-.03 2.61-.32 3.82-.86s2.25-1.27 3.13-2.16s1.57-1.95 2.09-3.18s.78-2.51.78-3.86c0-1.8-.44-3.46-1.33-5s-2.08-2.75-3.6-3.65s-3.18-1.37-4.98-1.4" />
+</svg>`
+const cuppaSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" {...props}>
+<path fill="currentColor" d="M4 19h16v2H4zM20 8V5h-2v3zm0-5c.6 0 1 .2 1.4.6s.6.9.6 1.4v3c0 .6-.2 1-.6 1.4s-.8.6-1.4.6h-2v3c0 1.1-.4 2-1.2 2.8S15.1 17 14 17H8c-1.1 0-2-.4-2.8-1.2S4 14.1 4 13V3h5v2.4L7.2 6.8c-.1.1-.2.3-.2.4v4.3c0 .3.2.5.5.5h4c.3 0 .5-.2.5-.5V7.2c0-.2-.1-.3-.2-.4L10 5.4V3z" />
+</svg>`
+const burgerSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48" {...props}>
+	<path fill="currentColor" fill-rule="evenodd" d="M24.5 2.5c-2.617 0-4.902.043-6.882.113C10.359 2.868 4.5 8.506 4.5 15.875c0 1.727.194 3.218.406 4.336c.368 1.936 1.91 3.31 3.808 3.56c2.44.323 7.21.729 15.786.729s13.346-.406 15.786-.728c1.897-.251 3.44-1.625 3.808-3.561c.212-1.118.406-2.61.406-4.336c0-7.369-5.86-13.007-13.118-13.262c-1.98-.07-4.265-.113-6.882-.113m11 12.5a1.5 1.5 0 0 1 1.5-1.5h.5a1.5 1.5 0 0 1 0 3H37a1.5 1.5 0 0 1-1.5-1.5M31 9.5a1.5 1.5 0 0 0 0 3h.5a1.5 1.5 0 0 0 0-3zm1 8.5a1.5 1.5 0 0 0-1.5-1.5H30a1.5 1.5 0 0 0 0 3h.5A1.5 1.5 0 0 0 32 18m7.499 8.385c-2.781.304-7.46.615-14.999.615s-12.217-.31-14.999-.615c-2.337-.257-4.474-1.462-5.831-3.347q-.116.045-.23.097c-.753.345-1.502.986-1.78 2.051c-.102.394-.16.831-.16 1.314s.058.921.16 1.315c.278 1.065 1.027 1.706 1.78 2.051c.715.328 1.5.428 2.134.448c2.387.075 7.738.186 18.426.186c10.3 0 15.643-.103 18.154-.178c.737-.021 1.627-.15 2.417-.537c.831-.409 1.628-1.156 1.847-2.355q.08-.435.082-.93c.002-.495-.029-.64-.082-.93c-.18-.988-.754-1.67-1.416-2.107c-1.36 1.641-3.347 2.685-5.503 2.922M24 33c-10.703 0-16.081-.112-18.504-.188c-.799-.024-1.956-.15-3.098-.674l-.05-.023l-.008.006c-.283.215-.949.848-.825 1.898a2.91 2.91 0 0 0 1.304 2.134c.632.42 1.366.589 1.988.666c.983.122 2.14.052 2.995 0q.301-.019.542-.03c.974-.045 1.745.06 2.185.287c3.663 1.899 7.526 1.899 11.189 0c1.589-.824 2.977-.824 4.566 0c3.663 1.899 7.526 1.899 11.19 0c.438-.228 1.21-.332 2.184-.287q.242.011.542.03c.854.052 2.012.122 2.995 0c.622-.077 1.356-.247 1.987-.666a2.9 2.9 0 0 0 1.305-2.134c.107-.913-.391-1.522-.695-1.79a2 2 0 0 0-.204-.16c-1.207.572-2.454.725-3.36.752C39.684 32.896 34.315 33 24 33M8.46 39.286c.357-.017.643-.005.846.022q.107.015.146.025c4.363 2.235 9.056 2.222 13.416-.038c.867-.45 1.398-.45 2.265 0c4.36 2.26 9.053 2.273 13.417.038q.038-.01.145-.025c.203-.027.489-.039.847-.022l.396.023c.821.052 2.316.146 3.565-.01a9 9 0 0 0 .996-.18c-.074 3.85-3.739 6.063-6.959 6.18c-2.824.105-7.053.2-13.04.2s-10.215-.095-13.04-.2c-3.168-.116-6.768-2.26-6.952-5.998c1.247.154 2.736.06 3.556.008z" clip-rule="evenodd" />
+</svg>`
+
+const props = Astro.props
+---
+<div class="max-w-4xl mx-auto pb-20">
+  <div class="mb-8 p-6 neo-border bg-white/50 dark:bg-neo-dark/50 text-black dark:text-white">
+    <p class="font-bold mb-4 italic text-sm md:text-base">
+      If you have no URL to an .ics file at hand and you can't be bothered
+      to look for one, here's some:
+    </p>
+    <div class="flex flex-col gap-3">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 p-3 bg-white dark:bg-neo-dark neo-border border-2">
+        <span class="font-black flex items-center gap-2 uppercase text-xs"><Fragment set:html={moonSVG} /> Moon Phases</span>
+        <code class="text-[10px] md:text-xs truncate bg-gray-100 dark:bg-zinc-700 p-1 flex-grow mx-2">
+          https://mooncal.ch/mooncal.ics...
+        </code>
+        <button
+          type="button"
+          data-url="https://mooncal.ch/mooncal.ics?created=65885508461&lang=en&phases[full]=true&phases[new]=false&phases[quarter]=false&phases[daily]=false&style=withDescription&events[lunareclipse]=true&events[solareclipse]=true&events[moonlanding]=true&before=P6M&after=P2Y&zone=Europe/London"
+          class="example-btn neo-button py-1 px-3 min-w-32 text-[10px] bg-neo-purple text-white dark:bg-neo-pink dark:text-black"
+        >
+          Copy to form
+        </button>
+      </div>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 p-3 bg-white dark:bg-neo-dark neo-border border-2">
+        <span class="font-black flex items-center gap-2 uppercase text-xs"><Fragment set:html={cuppaSVG} /> UK Holidays</span>
+        <code class="text-[10px] md:text-xs truncate bg-gray-100 dark:bg-zinc-700 p-1 flex-grow mx-2">
+          https://calendar.google.com/calendar/ical...
+        </code>
+        <button
+          type="button"
+          data-url="https://calendar.google.com/calendar/ical/en.uk%23holiday%40group.v.calendar.google.com/public/basic.ics"
+          class="example-btn neo-button py-1 px-3 min-w-32 text-[10px] bg-neo-purple text-white dark:bg-neo-pink dark:text-black"
+        >
+          Copy to form
+        </button>
+      </div>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 p-3 bg-white dark:bg-neo-dark neo-border border-2">
+        <span class="font-black flex items-center gap-2 uppercase text-xs"><Fragment set:html={burgerSVG} /> USA Holidays</span>
+        <code class="text-[10px] md:text-xs truncate bg-gray-100 dark:bg-zinc-700 p-1 flex-grow mx-2">
+          https://calendar.google.com/calendar/ical...
+        </code>
+        <button
+          type="button"
+          data-url="https://calendar.google.com/calendar/ical/en.usa%23holiday%40group.v.calendar.google.com/public/basic.ics"
+          class="example-btn neo-button py-1 px-3 min-w-32 text-[10px] bg-neo-purple text-white dark:bg-neo-pink dark:text-black"
+        >
+          Copy to form
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <form id="url-input-form" class="space-y-6">
+    <div id="url-list-container" class="flex flex-col gap-4">
+      <label class="text-2xl font-black uppercase">Calendar URLs</label>
+      <div class="url-row flex gap-4">
+        <input
+          type="url"
+          name="url"
+          class="neo-input flex-grow"
+          placeholder="https://example.com/cal.ics"
+          required
+        />
+        <button type="button" class="remove-btn neo-button bg-red-500 text-white px-4 hidden">✕</button>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      id="add-url-btn"
+      class="neo-button bg-white text-black dark:bg-neo-purple dark:text-white self-start"
+    >
+      + Add URL
+    </button>
+
+    <button
+      type="submit"
+      id="url-submit-btn"
+      class="neo-button w-full text-2xl py-6 bg-white text-black dark:bg-neo-pink hover:opacity-90 flex items-center justify-center gap-4"
+    >
+      <span class="btn-text">Fetch Calendars</span>
+      <div class="loading-spinner hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="animate-spin">
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a9 9 0 1 0 9 9" />
+        </svg>
+      </div>
+    </button>
+  </form>
+</div>
+
+<template id="url-row-template">
+  <div class="url-row flex gap-4 animate-in fade-in slide-in-from-left-4 duration-200">
+    <input
+      type="url"
+      name="url"
+      class="neo-input flex-grow"
+      placeholder="https://example.com/cal.ics"
+      required
+    />
+    <button type="button" class="remove-btn neo-button bg-red-500 text-white px-4">✕</button>
+  </div>
+</template>
+
+<script>
+  const form = document.getElementById('url-input-form') as HTMLFormElement;
+  const urlList = document.getElementById('url-list-container');
+  const addBtn = document.getElementById('add-url-btn');
+  const template = document.getElementById('url-row-template') as HTMLTemplateElement;
+  const submitBtn = document.getElementById('url-submit-btn') as HTMLButtonElement;
+  const btnText = submitBtn.querySelector('.btn-text') as HTMLElement;
+  const spinner = submitBtn.querySelector('.loading-spinner') as HTMLElement;
+
+  function updateRemoveButtons() {
+    const rows = document.querySelectorAll('.url-row');
+    rows.forEach(row => {
+      const removeBtn = row.querySelector('.remove-btn');
+      if (rows.length === 1) {
+        removeBtn?.classList.add('hidden');
+      } else {
+        removeBtn?.classList.remove('hidden');
+      }
+    });
+    
+    if (rows.length >= 5) {
+      addBtn?.classList.add('hidden');
+    } else {
+      addBtn?.classList.remove('hidden');
+    }
+  }
+
+  addBtn?.addEventListener('click', () => {
+    const rows = document.querySelectorAll('.url-row');
+    if (rows.length < 5 && template) {
+      const clone = template.content.cloneNode(true) as HTMLElement;
+      urlList?.appendChild(clone);
+      updateRemoveButtons();
+    }
+  });
+
+  urlList?.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('remove-btn')) {
+      target.closest('.url-row')?.remove();
+      updateRemoveButtons();
+    }
+  });
+
+  // Example buttons logic
+  document.querySelectorAll('.example-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const url = btn.getAttribute('data-url');
+      if (!url) return;
+
+      const inputs = document.querySelectorAll('input[name="url"]') as NodeListOf<HTMLInputElement>;
+      let filled = false;
+      
+      // Try to fill first empty input
+      for (const input of inputs) {
+        if (!input.value) {
+          input.value = url;
+          filled = true;
+          break;
+        }
+      }
+
+      // If all filled and < 5, add new one
+      if (!filled && inputs.length < 5) {
+        addBtn?.click();
+        const newInputs = document.querySelectorAll('input[name="url"]') as NodeListOf<HTMLInputElement>;
+        newInputs[newInputs.length - 1].value = url;
+      }
+    });
+  });
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const lookaheadInput = document.getElementById('lookahead-input') as HTMLInputElement;
+    const limitInput = document.getElementById('limit-input') as HTMLInputElement;
+    const templateInput = document.getElementById('template-input') as HTMLInputElement;
+
+    const inputs = document.querySelectorAll('input[name="url"]') as NodeListOf<HTMLInputElement>;
+    const urls = Array.from(inputs).map(i => i.value).filter(v => v.trim() !== '');
+    
+    submitBtn.disabled = true;
+    btnText.innerText = 'Fetching...';
+    spinner.classList.remove('hidden');
+
+    try {
+      const response = await fetch('/api/process-urls', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          urls,
+          options: { 
+            upcomingDays: parseInt(lookaheadInput?.value || '7'), 
+            limit: parseInt(limitInput?.value || '0'),
+            template: templateInput?.value || ''
+          }
+        })
+      });
+      
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.length === 0) {
+          alert('No upcoming events found for these calendars in the given range.');
+        } else {
+          console.log('[UrlInputForm] Dispatching jfi:show-events with', data.length, 'events');
+          window.dispatchEvent(new CustomEvent('jfi:show-events', { detail: data }));
+        }
+      } else {
+        alert(`Error: ${data.error || 'Unknown error'}`);
+      }
+    } catch (err: any) {
+      alert(`Failed to process URLs: ${err.message}`);
+    } finally {
+      submitBtn.disabled = false;
+      btnText.innerText = 'Fetch Calendars';
+      spinner.classList.add('hidden');
+    }
+  });
+</script>

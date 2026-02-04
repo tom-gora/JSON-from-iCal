@@ -1,0 +1,119 @@
+<div class="neo-border bg-neo-purple text-white dark:bg-neo-pink dark:text-black p-4 mb-8 grid grid-rows-3 grid-cols-1 lg:grid-cols-4 lg:grid-rows-1 gap-6 items-center shadow-lg transition-colors">
+  <div class="flex items-center justify-between lg:justify-start gap-8">
+    <label class="flex justify-between font-black uppercase text-sm">
+      Days ahead:
+    </label>
+    <input
+      type="number"
+      id="lookahead-input"
+      min="0"
+      class="neo-input w-24 py-1"
+    />
+  </div>
+  <div class="flex items-center justify-between lg:justify-start gap-8">
+    <label class="font-black uppercase text-sm">
+      Limit events:
+    </label>
+    <input
+      type="number"
+      id="limit-input"
+      min="0"
+      class="neo-input w-24 py-1"
+    />
+  </div>
+  <div class="flex items-center justify-between lg:justify-start gap-8 grid-span-2">
+    <label class="font-black uppercase text-sm whitespace-nowrap">
+      Template:
+    </label>
+    <div class="flex-grow flex items-center justify-end gap-4">
+      <button 
+        type="button" 
+        id="template-help-btn"
+        class="neo-button-sm aspect-square grid items-center bg-white text-black dark:bg-neo-dark dark:text-white"
+        title="Template Help"
+      >?</button>
+      <input
+        type="text"
+        id="template-input"
+        placeholder="Date Template"
+        class="neo-input w-42 lg:w-auto py-1 min-w-0"
+      />
+    </div>
+  </div>
+</div>
+
+<dialog id="template-help-dialog" class="neo-border neo-shadow-lg p-8 bg-white dark:bg-neo-dark text-black dark:text-white max-w-lg fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/70">
+  <div class="flex justify-between items-start mb-6 gap-8">
+    <h2 class="text-2xl font-black uppercase italic text-black dark:text-white">Date Templating</h2>
+    <button id="close-help-btn" class="neo-button-sm !bg-[#dd8181] py-1 bg-neo-pink text-black">×</button>
+  </div>
+  
+  <div class="space-y-4 font-bold overflow-y-auto max-h-[60vh] pr-4">
+    <div class="grid grid-cols-2 gap-2 border-b-2 border-black dark:border-white pb-2">
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">M</code> <span class="text-black dark:text-white">month (1)</span>
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">MM</code> <span class="text-black dark:text-white">month (01)</span>
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">MMM</code> <span class="text-black dark:text-white">month (Jan)</span>
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">MMMM</code> <span class="text-black dark:text-white">month (January)</span>
+    </div>
+    <div class="grid grid-cols-2 gap-2 border-b-2 border-black dark:border-white pb-2">
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">D</code> <span class="text-black dark:text-white">day (2)</span>
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">DD</code> <span class="text-black dark:text-white">day (02)</span>
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">DDD</code> <span class="text-black dark:text-white">day (Mon)</span>
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">DDDD</code> <span class="text-black dark:text-white">day (Monday)</span>
+    </div>
+    <div class="grid grid-cols-2 gap-2 border-b-2 border-black dark:border-white pb-2">
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">YY</code> <span class="text-black dark:text-white">year (06)</span>
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">YYYY</code> <span class="text-black dark:text-white">year (2006)</span>
+    </div>
+    <div class="grid grid-cols-2 gap-2 pb-2">
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">hh</code> <span class="text-black dark:text-white">hours (15)</span>
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">mm</code> <span class="text-black dark:text-white">minutes (04)</span>
+      <code class="text-neo-purple dark:text-neo-pink font-black text-lg">ss</code> <span class="text-black dark:text-white">seconds (05)</span>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('template-help-dialog') as HTMLDialogElement;
+  const openBtn = document.getElementById('template-help-btn');
+  const closeBtn = document.getElementById('close-help-btn');
+
+  const lookaheadInput = document.getElementById('lookahead-input') as HTMLInputElement;
+  const limitInput = document.getElementById('limit-input') as HTMLInputElement;
+  const templateInput = document.getElementById('template-input') as HTMLInputElement;
+
+  // Persistence Key Helpers
+  const LH_KEY = 'jfi_lookahead';
+  const LM_KEY = 'jfi_limit';
+  const TM_KEY = 'jfi_template';
+
+  // Initialize from LocalStorage
+  if (lookaheadInput) lookaheadInput.value = localStorage.getItem(LH_KEY) || '7';
+  if (limitInput) limitInput.value = localStorage.getItem(LM_KEY) || '0';
+  if (templateInput) templateInput.value = localStorage.getItem(TM_KEY) || 'YYYY MMM DD';
+
+  // Save on change with validation
+  const saveWithValidation = (input: HTMLInputElement, key: string, isNumber: boolean) => {
+    let val = input.value;
+    if (isNumber) {
+      const num = parseInt(val);
+      if (isNaN(num) || num < 0) {
+        val = '0';
+        input.value = '0';
+      }
+    }
+    localStorage.setItem(key, val);
+  };
+
+  lookaheadInput?.addEventListener('input', () => saveWithValidation(lookaheadInput, LH_KEY, true));
+  limitInput?.addEventListener('input', () => saveWithValidation(limitInput, LM_KEY, true));
+  templateInput?.addEventListener('input', () => saveWithValidation(templateInput, TM_KEY, false));
+
+  openBtn?.addEventListener('click', () => dialog.showModal());
+  closeBtn?.addEventListener('click', () => dialog.close());
+
+  // Close on click outside
+  dialog?.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>

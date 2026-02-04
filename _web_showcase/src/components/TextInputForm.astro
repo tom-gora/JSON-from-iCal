@@ -1,0 +1,85 @@
+<div class="max-w-4xl mx-auto">
+  <form id="text-input-form" class="space-y-6">
+    <div class="flex flex-col gap-2">
+      <label class="text-2xl font-black uppercase">
+        Raw iCal Content
+      </label>
+      <textarea
+        name="text"
+        id="ical-content-textarea"
+        class="neo-input min-h-[300px] font-mono text-sm"
+        placeholder="BEGIN:VCALENDAR..."
+        required
+      ></textarea>
+    </div>
+
+    <button
+      type="submit"
+      id="text-submit-btn"
+      class="neo-button w-full text-2xl py-6 bg-white text-black dark:bg-neo-pink hover:opacity-90 flex items-center justify-center gap-4"
+    >
+      <span class="btn-text">Process Calendar</span>
+      <div class="loading-spinner hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="animate-spin">
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3a9 9 0 1 0 9 9" />
+        </svg>
+      </div>
+    </button>
+  </form>
+</div>
+
+<script>
+  const form = document.getElementById('text-input-form') as HTMLFormElement;
+  const submitBtn = document.getElementById('text-submit-btn') as HTMLButtonElement;
+  const btnText = submitBtn.querySelector('.btn-text') as HTMLElement;
+  const spinner = submitBtn.querySelector('.loading-spinner') as HTMLElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Scrape config from the DOM
+    const lookaheadInput = document.getElementById('lookahead-input') as HTMLInputElement;
+    const limitInput = document.getElementById('limit-input') as HTMLInputElement;
+    const templateInput = document.getElementById('template-input') as HTMLInputElement;
+
+    const text = (document.getElementById('ical-content-textarea') as HTMLTextAreaElement).value;
+    
+    submitBtn.disabled = true;
+    btnText.innerText = 'Processing...';
+    spinner.classList.remove('hidden');
+
+    try {
+      const response = await fetch('/api/process-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text,
+          options: { 
+            upcomingDays: parseInt(lookaheadInput?.value || '7'), 
+            limit: parseInt(limitInput?.value || '0'),
+            template: templateInput?.value || ''
+          }
+        })
+      });
+      
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.length === 0) {
+          alert('No upcoming events found for this calendar in the given range.');
+        } else {
+          console.log('[TextInputForm] Dispatching jfi:show-events with', data.length, 'events');
+          window.dispatchEvent(new CustomEvent('jfi:show-events', { detail: data }));
+        }
+      } else {
+        alert(`Error: ${data.error || 'Unknown error'}`);
+      }
+    } catch (err: any) {
+      alert(`Failed to process text: ${err.message}`);
+    } finally {
+      submitBtn.disabled = false;
+      btnText.innerText = 'Process Calendar';
+      spinner.classList.add('hidden');
+    }
+  });
+</script>
