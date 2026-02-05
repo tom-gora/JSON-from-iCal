@@ -16,6 +16,7 @@
     "astro": "^5.17.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.563.0",
+    "prismjs": "^1.30.0",
     "svelte": "^5.49.2",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18"

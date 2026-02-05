@@ -1,0 +1,174 @@
+/**
+* ##########
+* Modified from base:
+* ##########
+*
+ * Nord Theme Originally by Arctic Ice Studio
+ * https://nordtheme.com
+ *
+ * Ported for PrismJS by Zane Hitchcoxc (@zwhitchcox) and Gabriel Ramos (@gabrieluizramos)
+ */
+:root {
+  --code-bg: #2c343c;
+}
+
+html.dark #json-wrapper.active {
+  --code-bg: #15181d;
+}
+
+#json-wrapper {
+  margin-inline: auto;
+  max-width: 90dvw;
+  overflow-x: clip;
+
+  @media (width >= 1024px) {
+    max-width: 56rem;
+  }
+
+  opacity: 0;
+  height: 0;
+  &.active {
+    position: relative;
+    opacity: 1;
+    height: auto;
+    background-color: var(--code-bg);
+    padding-inline: 2rem;
+    padding-block: 1rem;
+    border-width: 4px;
+    border-color: black;
+    box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 5rem;
+      background: linear-gradient(
+        to right,
+        transparent 0 20%,
+        var(--code-bg) 50% 100%
+      );
+    }
+  }
+}
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #f8f8f2;
+  background: none;
+  font-family:
+    "Fira Code", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+  border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #2e3440;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: 0.1em;
+  border-radius: 0.3em;
+  white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #636f88;
+}
+
+.token.punctuation {
+  color: #e191b8;
+}
+
+.namespace {
+  opacity: 0.7;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #e191b8;
+}
+
+.token.number {
+  color: #dd8181;
+}
+
+.token.boolean {
+  color: #e191b8;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #4c7a63;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+  color: #e191b8;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.function,
+.token.class-name {
+  color: #88c0d0;
+}
+
+.token.keyword {
+  color: #e191b8;
+}
+
+.token.regex,
+.token.important {
+  color: #ebcb8b;
+}
+
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}

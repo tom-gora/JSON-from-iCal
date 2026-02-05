@@ -1,0 +1,25 @@
+<div id="json-wrapper">
+  <pre>
+    <code id="json-output"></code>
+  </pre>
+</div>
+
+  <script>
+  import Prism from "prismjs";
+  import "prismjs/components/prism-json";
+
+  const wrapper = document.querySelector("#json-wrapper") as HTMLElement;
+  const target = document.querySelector("#json-output") as HTMLElement;
+
+  window.addEventListener('jfi:show-events', (e: any) => {
+    const data = JSON.stringify(e.detail, null,2) as string;
+    const dataFormatted = Prism.highlight(data, Prism.languages.json, "json") as string;
+    wrapper.classList.add("active");
+    target.innerHTML = dataFormatted;
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest', 
+    })
+  })
+  </script>
+
