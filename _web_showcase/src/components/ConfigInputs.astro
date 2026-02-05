@@ -1,31 +1,92 @@
-<div class="neo-border max-w-[60rem] mx-auto bg-neo-purple text-white dark:bg-neo-pink dark:text-black p-4 mb-8 grid grid-rows-3 grid-cols-1 lg:grid-cols-4 lg:grid-rows-1 gap-6 items-center shadow-lg transition-colors">
-  <div class="flex items-center justify-between lg:justify-start gap-8">
-    <label class="flex justify-between font-black uppercase text-sm">
-      Days ahead:
+<style>
+#inputs-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  input {
+    width: 100%;
+  }
+}
+
+@media(width >= 640px) {
+  .input-wrapper{
+    flex-direction: row;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media(width >= 1024px) {
+  #inputs-panel {
+    display: grid;
+    grid-template-areas: 
+      "a a b b c c c c"
+      "d d d d e e e e";
+  }
+  .input-wrapper {
+    display: flex;
+  }
+  .input-wrapper:nth-child(1) {
+    grid-area: a;
+  }
+  .input-wrapper:nth-child(2) {
+    grid-area: b;
+  }
+  .input-wrapper:nth-child(3) {
+    grid-area: c;
+  }
+  .input-wrapper:nth-child(4) {
+    grid-area: d;
+
+    label {
+      margin-left: auto;
+    }
+  }
+  .input-wrapper:nth-child(5) {
+    grid-area: e;
+  }
+  input {
+    width: unset;
+    max-width: 12rem;
+  }
+}
+
+</style>
+<div id="inputs-panel" class="neo-border max-w-[60rem] mx-auto bg-neo-purple text-white dark:bg-neo-pink dark:text-black p-4 mb-8 gap-6 items-center shadow-lg transition-colors">
+  <div class="input-wrapper col-span-3">
+    <label for="lookahead-input" class="font-black uppercase text-sm whitespace-nowrap">
+      Days from today:
     </label>
     <input
       type="number"
       id="lookahead-input"
       min="0"
-      class="neo-input w-24 py-1"
+      class="neo-input w-full py-1"
     />
   </div>
-  <div class="flex items-center justify-between lg:justify-start gap-8">
-    <label class="font-black uppercase text-sm">
+  <div class="input-wrapper col-span-3">
+    <label class="font-black uppercase text-sm whitespace-nowrap">
       Limit events:
     </label>
     <input
       type="number"
       id="limit-input"
       min="0"
-      class="neo-input w-24 py-1"
+      class="neo-input w-full py-1"
     />
   </div>
-  <div class="flex items-center justify-between lg:justify-start gap-8 grid-span-2">
+  <div class="input-wrapper">
     <label class="font-black uppercase text-sm whitespace-nowrap">
       Template:
     </label>
-    <div class="flex-grow flex items-center justify-end gap-4">
+    <div class="w-full lg:flex-grow flex items-center justify-end gap-2">
       <button 
         type="button" 
         id="template-help-btn"
@@ -36,9 +97,32 @@
         type="text"
         id="template-input"
         placeholder="Date Template"
-        class="neo-input w-42 lg:w-auto py-1 min-w-0"
+        class="neo-input w-full py-1 min-w-0"
       />
     </div>
+  </div>
+
+  <div class="input-wrapper">
+    <label class="font-black uppercase text-sm whitespace-nowrap">
+      Append Today:
+    </label>
+    <input
+      type="text"
+      id="marker-today-input"
+      placeholder="e.g. (TODAY)"
+      class="neo-input py-1"
+    />
+  </div>
+  <div class="input-wrapper">
+    <label class="font-black uppercase text-sm whitespace-nowrap">
+      Append Tomorrow:
+    </label>
+    <input
+      type="text"
+      id="marker-tomorrow-input"
+      placeholder="e.g. (TOMORROW)"
+      class="neo-input py-1"
+    />
   </div>
 </div>
 
@@ -81,16 +165,22 @@
   const lookaheadInput = document.getElementById('lookahead-input') as HTMLInputElement;
   const limitInput = document.getElementById('limit-input') as HTMLInputElement;
   const templateInput = document.getElementById('template-input') as HTMLInputElement;
+  const markerTodayInput = document.getElementById('marker-today-input') as HTMLInputElement;
+  const markerTomorrowInput = document.getElementById('marker-tomorrow-input') as HTMLInputElement;
 
   // Persistence Key Helpers
   const LH_KEY = 'jfi_lookahead';
   const LM_KEY = 'jfi_limit';
   const TM_KEY = 'jfi_template';
+  const M0_KEY = 'jfi_marker_0';
+  const M1_KEY = 'jfi_marker_1';
 
   // Initialize from LocalStorage
   if (lookaheadInput) lookaheadInput.value = localStorage.getItem(LH_KEY) || '7';
   if (limitInput) limitInput.value = localStorage.getItem(LM_KEY) || '0';
   if (templateInput) templateInput.value = localStorage.getItem(TM_KEY) || 'YYYY MMM DD';
+  if (markerTodayInput) markerTodayInput.value = localStorage.getItem(M0_KEY) || '';
+  if (markerTomorrowInput) markerTomorrowInput.value = localStorage.getItem(M1_KEY) || '';
 
   // Save on change with validation
   const saveWithValidation = (input: HTMLInputElement, key: string, isNumber: boolean) => {
@@ -108,6 +198,8 @@
   lookaheadInput?.addEventListener('input', () => saveWithValidation(lookaheadInput, LH_KEY, true));
   limitInput?.addEventListener('input', () => saveWithValidation(limitInput, LM_KEY, true));
   templateInput?.addEventListener('input', () => saveWithValidation(templateInput, TM_KEY, false));
+  markerTodayInput?.addEventListener('input', () => saveWithValidation(markerTodayInput, M0_KEY, false));
+  markerTomorrowInput?.addEventListener('input', () => saveWithValidation(markerTomorrowInput, M1_KEY, false));
 
   openBtn?.addEventListener('click', () => dialog.showModal());
   closeBtn?.addEventListener('click', () => dialog.close());

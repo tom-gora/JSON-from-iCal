@@ -1,4 +1,4 @@
-<div class="max-w-4xl mx-auto">
+<div class="max-w-4xl mx-auto pb-20">
   <form id="text-input-form" class="space-y-6">
     <div class="flex flex-col gap-2">
       <label class="text-2xl font-black uppercase">
@@ -41,12 +41,18 @@
     const lookaheadInput = document.getElementById('lookahead-input') as HTMLInputElement;
     const limitInput = document.getElementById('limit-input') as HTMLInputElement;
     const templateInput = document.getElementById('template-input') as HTMLInputElement;
+    const markerTodayInput = document.getElementById('marker-today-input') as HTMLInputElement;
+    const markerTomorrowInput = document.getElementById('marker-tomorrow-input') as HTMLInputElement;
 
     const text = (document.getElementById('ical-content-textarea') as HTMLTextAreaElement).value;
     
     submitBtn.disabled = true;
     btnText.innerText = 'Processing...';
     spinner.classList.remove('hidden');
+
+    const offsetMarkers: Record<string, string> = {};
+    if (markerTodayInput?.value) offsetMarkers['0'] = markerTodayInput.value;
+    if (markerTomorrowInput?.value) offsetMarkers['1'] = markerTomorrowInput.value;
 
     try {
       const response = await fetch('/api/process-text', {
@@ -57,7 +63,8 @@
           options: { 
             upcomingDays: parseInt(lookaheadInput?.value || '7'), 
             limit: parseInt(limitInput?.value || '0'),
-            template: templateInput?.value || ''
+            template: templateInput?.value || '',
+            offsetMarkers
           }
         })
       });

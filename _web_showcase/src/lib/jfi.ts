@@ -1,6 +1,8 @@
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import fs from 'node:fs';
+import os from 'node:os';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -11,6 +13,7 @@ export interface JfiOptions {
   upcomingDays?: number;
   limit?: number;
   template?: string;
+  offsetMarkers?: Record<string, string>;
 }
 
 export function buildBinary() {
@@ -27,40 +30,59 @@ export function runJfi(input: string | string[], options: JfiOptions = {}) {
   const upcomingDays = Math.max(0, options.upcomingDays || 7);
   const limit = Math.max(0, options.limit || 0);
   const template = (options.template || '').trim();
+  const offsetMarkers = options.offsetMarkers || {};
 
   const args: string[] = ['-f', 'stdout'];
   args.push('-u', upcomingDays.toString());
   args.push('-l', limit.toString());
   if (template) args.push('-t', template);
 
-  if (Array.isArray(input)) {
-    // URL Mode: We must ignore stdin to prevent the binary from entering Stdin Mode
-    const configPath = path.join(PROJECT_ROOT, '.tmp_web_config.json');
-    const config = {
-      calendars: input,
-      upcoming_days: upcomingDays,
-      events_limit: limit,
-    };
-    
-    fs.writeFileSync(configPath, JSON.stringify(config));
-    
-    const result = spawnSync(BIN_PATH, [...args, '-c', configPath], { 
-      cwd: PROJECT_ROOT,
-      stdio: ['ignore', 'pipe', 'pipe'] // 'ignore' sets stdin to /dev/null
-    });
-    
+  const configPath = path.join(os.tmpdir(), `jfi-config-${crypto.randomUUID()}.json`);
+
+  try {
+    if (Array.isArray(input)) {
+      // URL Mode: We must ignore stdin to prevent the binary from entering Stdin Mode
+      const config = {
+        calendars: input,
+        upcoming_days: upcomingDays,
+        events_limit: limit,
+        date_template: template,
+        offset_markers: offsetMarkers,
+      };
+      
+      fs.writeFileSync(configPath, JSON.stringify(config));
+      
+      const result = spawnSync(BIN_PATH, [...args, '-c', configPath], { 
+        cwd: PROJECT_ROOT,
+        stdio: ['ignore', 'pipe', 'pipe'] // 'ignore' sets stdin to /dev/null
+      });
+      
+      return handleResult(result);
+    } else {
+      // Stdin Mode: We provide the input string to stdin
+      // If we have offsetMarkers, we STILL need to provide a config file 
+      // because there's no CLI flag for markers yet.
+      if (Object.keys(offsetMarkers).length > 0) {
+        const config = {
+          upcoming_days: upcomingDays,
+          events_limit: limit,
+          date_template: template,
+          offset_markers: offsetMarkers,
+        };
+        fs.writeFileSync(configPath, JSON.stringify(config));
+        args.push('-c', configPath);
+      }
+
+      const result = spawnSync(BIN_PATH, args, {
+        cwd: PROJECT_ROOT,
+        input: input,
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+      
+      return handleResult(result);
+    }
+  } finally {
     if (fs.existsSync(configPath)) fs.unlinkSync(configPath);
-    
-    return handleResult(result);
-  } else {
-    // Stdin Mode: We provide the input string to stdin
-    const result = spawnSync(BIN_PATH, args, {
-      cwd: PROJECT_ROOT,
-      input: input,
-      stdio: ['pipe', 'pipe', 'pipe']
-    });
-    
-    return handleResult(result);
   }
 }
 

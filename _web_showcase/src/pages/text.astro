@@ -1,12 +1,16 @@
 ---
+import "../styles/prism-custom.css";
+
 import Layout from '../layouts/Layout.astro';
 import TextInputForm from '../components/TextInputForm.astro';
 import ConfigInputs from '../components/ConfigInputs.astro';
+import JsonPreview from '../components/JsonPreview.astro'
 ---
 
 <Layout title="Paste Text // jfi">
   <div class="py-6">
     <ConfigInputs />
     <TextInputForm />
+    <JsonPreview/>
   </div>
 </Layout>

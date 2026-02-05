@@ -78,6 +78,10 @@ body {
   font-family: "Inter", sans-serif;
 }
 
+.input-wrapper {
+  @apply flex items-center justify-start gap-4;
+}
+
 dialog::backdrop {
   background: rgba(0, 0, 0, 0.7);
 }
