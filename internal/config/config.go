@@ -41,22 +41,24 @@ const (
 )
 
 type ConfigModel struct {
-	Calendars    []string `json:"calendars"`
-	UpcomingDays int      `json:"upcoming_days"`
-	Limit        int      `json:"events_limit"`
-	OutputFile   string   `json:"output_file"`
-	DateTemplate string   `json:"date_template"`
+	Calendars     []string          `json:"calendars"`
+	UpcomingDays  int               `json:"upcoming_days"`
+	Limit         int               `json:"events_limit"`
+	OutputFile    string            `json:"output_file"`
+	DateTemplate  string            `json:"date_template"`
+	OffsetMarkers map[string]string `json:"offset_markers"`
 }
 
 type ExecutionCtx struct {
-	IsStdin      bool
-	Calendars    []string
-	UpcomingDays int
-	Limit        int
-	OutputFile   string
-	ConfigPath   string
-	DateTemplate string
-	Verbose      bool
+	IsStdin       bool
+	Calendars     []string
+	UpcomingDays  int
+	Limit         int
+	OutputFile    string
+	ConfigPath    string
+	DateTemplate  string
+	Verbose       bool
+	OffsetMarkers map[string]string
 }
 
 type FlagCtx struct {
@@ -73,11 +75,12 @@ type FlagCtx struct {
 
 func getDefaultConfigValues() ConfigModel {
 	return ConfigModel{
-		Calendars:    []string{},
-		UpcomingDays: DefaultUpcomingDays,
-		Limit:        DefaultLimit,
-		OutputFile:   DefaultOutputFile,
-		DateTemplate: DefaultDateTemplate,
+		Calendars:     []string{},
+		UpcomingDays:  DefaultUpcomingDays,
+		Limit:         DefaultLimit,
+		OutputFile:    DefaultOutputFile,
+		DateTemplate:  DefaultDateTemplate,
+		OffsetMarkers: map[string]string{},
 	}
 }
 
@@ -143,11 +146,12 @@ func setDefaultConfigPath() (string, error) {
 
 func getFileConfig(p string) (ConfigModel, error) {
 	config := ConfigModel{
-		Calendars:    []string{},
-		UpcomingDays: DefaultUpcomingDays,
-		Limit:        DefaultLimit,
-		OutputFile:   DefaultOutputFile,
-		DateTemplate: DefaultDateTemplate,
+		Calendars:     []string{},
+		UpcomingDays:  DefaultUpcomingDays,
+		Limit:         DefaultLimit,
+		OutputFile:    DefaultOutputFile,
+		DateTemplate:  DefaultDateTemplate,
+		OffsetMarkers: map[string]string{},
 	}
 
 	JSONBytes, err := os.ReadFile(fu.PathExpandTilde(p))
@@ -218,14 +222,15 @@ func InitCtx() (ExecutionCtx, []string) {
 
 	// 1. Set default
 	CONTEXT := ExecutionCtx{
-		IsStdin:      false,
-		Calendars:    []string{},
-		UpcomingDays: DefaultUpcomingDays,
-		Limit:        DefaultLimit,
-		OutputFile:   DefaultOutputFile,
-		ConfigPath:   confFile,
-		DateTemplate: DefaultDateTemplate,
-		Verbose:      DefaultVerbose,
+		IsStdin:       false,
+		Calendars:     []string{},
+		UpcomingDays:  DefaultUpcomingDays,
+		Limit:         DefaultLimit,
+		OutputFile:    DefaultOutputFile,
+		ConfigPath:    confFile,
+		DateTemplate:  DefaultDateTemplate,
+		Verbose:       DefaultVerbose,
+		OffsetMarkers: map[string]string{},
 	}
 
 	// 2. check the config file and override if new config values
@@ -249,6 +254,9 @@ func InitCtx() (ExecutionCtx, []string) {
 	}
 	if fileConfigCtx.DateTemplate != "" {
 		CONTEXT.DateTemplate = fileConfigCtx.DateTemplate
+	}
+	if fileConfigCtx.OffsetMarkers != nil {
+		CONTEXT.OffsetMarkers = fileConfigCtx.OffsetMarkers
 	}
 
 	// 3. carry on and finish with overrides from explicit flags

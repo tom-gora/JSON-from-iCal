@@ -37,17 +37,23 @@ func TestZeroOutTimeFromDate(t *testing.T) {
 
 func TestDateStrToHuman(t *testing.T) {
 	now := time.Date(2026, 1, 22, 12, 0, 0, 0, time.Local)
+	markers := map[string]string{
+		"0": " - TODAY !!",
+		"1": " - TOMORROW !",
+		"2": " - IN TWO DAYS",
+	}
 	tests := []struct {
 		input    string
 		contains string
 	}{
-		{"20260122T140000", "TODAY ‼️"},
-		{"20260123T100000", "TOMORROW ❗"},
-		{"20260124T100000", "[ Sat ] 24 Jan 2026"},
+		{"20260122T140000", "TODAY !!"},
+		{"20260123T100000", "TOMORROW !"},
+		{"20260124T100000", "IN TWO DAYS"},
+		{"20260125T100000", "[ Sun ] 25 Jan 2026"},
 	}
 
 	for _, tt := range tests {
-		got := dateStrToHuman(tt.input, "[ DDD ] DD MMM YYYY", now)
+		got := dateStrToHuman(tt.input, "[ DDD ] DD MMM YYYY", now, markers)
 		if !strings.Contains(got, tt.contains) {
 			t.Errorf("dateStrToHuman(%q, now) = %q, should contain %q", tt.input, got, tt.contains)
 		}

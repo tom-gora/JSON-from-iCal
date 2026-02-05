@@ -54,7 +54,7 @@ func main() {
 	if eCtx.IsStdin {
 		// Stdin fallback
 		l.Log.Info.Println("reading from stdin")
-		allEvents = ical.ProcessSourceToStruct(os.Stdin, now, eCtx.DateTemplate, eCtx.UpcomingDays)
+		allEvents = ical.ProcessSourceToStruct(os.Stdin, now, eCtx.DateTemplate, eCtx.UpcomingDays, eCtx.OffsetMarkers)
 	} else {
 		for _, uri := range uris {
 			l.Log.Info.Printf("processing source: %s", uri)
@@ -63,7 +63,7 @@ func main() {
 				l.Log.Error.Printf("failed to fetch %s: %v", uri, err)
 				continue
 			}
-			events := ical.ProcessSourceToStruct(rc, now, eCtx.DateTemplate, eCtx.UpcomingDays)
+			events := ical.ProcessSourceToStruct(rc, now, eCtx.DateTemplate, eCtx.UpcomingDays, eCtx.OffsetMarkers)
 			allEvents = append(allEvents, events...)
 			rc.Close()
 		}

@@ -47,23 +47,8 @@ func PathExpandTilde(p string) string {
 }
 
 func GetOutputPath(p string) string {
-	if p == "stdout" {
+	if p == "stdout" || p == "" {
 		return "stdout"
 	}
-	if p != "" {
-		return p
-	}
-
-	// Priority Logic for empty input
-	xdgCache := os.Getenv("XDG_CACHE_HOME")
-	if xdgCache != "" {
-		return filepath.Join(xdgCache, "event-notifications", "out.json")
-	}
-
-	home, err := os.UserHomeDir()
-	if err == nil {
-		return filepath.Join(home, ".cache", "event-notifications", "out.json")
-	}
-
-	return filepath.Join(".", "out", "out.json")
+	return PathExpandTilde(p)
 }

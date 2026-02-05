@@ -3,5 +3,10 @@
     "./test_data/calendars/calendar.ics",
     "./test_data/calendars/birthdays.ics",
     "https://mooncal.ch/mooncal.ics?created=65885508461&lang=en&phases[full]=true&phases[new]=false&phases[quarter]=false&phases[daily]=false&style=withDescription&events[lunareclipse]=true&events[solareclipse]=true&events[moonlanding]=true&before=P6M&after=P2Y&zone=Europe/London"
-  ]
+  ],
+  "offset_markers": {
+    "0": " - TODAY !!",
+    "1": " - TOMORROW !",
+    "7": " - IN A WEEK"
+  }
 }

@@ -4,6 +4,7 @@ package ical
 import (
 	"bufio"
 	"io"
+	"strconv"
 	"strings"
 	"time"
 
@@ -47,7 +48,7 @@ func getCalValueIfExists(e *ics.VEvent, p ics.ComponentProperty) string {
 	return ""
 }
 
-func dateStrToHuman(str string, templ string, now time.Time) string {
+func dateStrToHuman(str string, templ string, now time.Time, markers map[string]string) string {
 	if len(str) < 1 {
 		return ""
 	}
@@ -58,12 +59,19 @@ func dateStrToHuman(str string, templ string, now time.Time) string {
 	formattedDate := fmtdate.Format(templ, t)
 
 	today := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
-	tomorrow := today.AddDate(0, 0, 1)
-	if t.Year() == today.Year() && t.Month() == today.Month() && t.Day() == today.Day() {
-		formattedDate += " - TODAY ‼️"
-	} else if t.Year() == tomorrow.Year() && t.Month() == tomorrow.Month() && t.Day() == tomorrow.Day() {
-		formattedDate += " - TOMORROW ❗"
+
+	for k, v := range markers {
+		offset, err := strconv.Atoi(k)
+		if err != nil {
+			continue
+		}
+		targetDate := today.AddDate(0, 0, offset)
+		if t.Year() == targetDate.Year() && t.Month() == targetDate.Month() && t.Day() == targetDate.Day() {
+			formattedDate += v
+			break
+		}
 	}
+
 	return formattedDate
 }
 
@@ -105,7 +113,7 @@ func shouldIncludeEvent(dtStart, dtEnd, windowStart, windowEnd time.Time) (keep 
 }
 
 // parse ical event raw text to struct
-func strToStructEvent(e *ics.VEvent, t string, now time.Time) CalendarEvent {
+func strToStructEvent(e *ics.VEvent, t string, now time.Time, markers map[string]string) CalendarEvent {
 	uid := getCalValueIfExists(e, ics.ComponentPropertyUniqueId)
 	start := getCalValueIfExists(e, ics.ComponentPropertyDtStart)
 	actualEnd := getCalValueIfExists(e, ics.ComponentPropertyDtEnd)
@@ -130,10 +138,10 @@ func strToStructEvent(e *ics.VEvent, t string, now time.Time) CalendarEvent {
 	return CalendarEvent{
 		UID:         uid,
 		Start:       start,
-		HumanStart:  dateStrToHuman(start, t, now),
+		HumanStart:  dateStrToHuman(start, t, now, markers),
 		UnixStart:   us,
 		End:         actualEnd,
-		HumanEnd:    dateStrToHuman(actualEnd, t, now),
+		HumanEnd:    dateStrToHuman(actualEnd, t, now, markers),
 		UnixEnd:     ue,
 		ActualEnd:   actualEnd,
 		Summary:     summary,

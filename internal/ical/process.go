@@ -61,7 +61,7 @@ func FetchSource(uri string) (io.ReadCloser, error) {
 	return nil, fmt.Errorf("invalid source: %s", uri)
 }
 
-func ProcessSourceToStruct(r io.Reader, today time.Time, t string, u int) []CalendarEvent {
+func ProcessSourceToStruct(r io.Reader, today time.Time, t string, u int, markers map[string]string) []CalendarEvent {
 	events := []CalendarEvent{}
 
 	// Apply X-APPLE- filtering
@@ -79,7 +79,7 @@ func ProcessSourceToStruct(r io.Reader, today time.Time, t string, u int) []Cale
 
 	totalEvents := len(cal.Events())
 	for _, e := range cal.Events() {
-		event := strToStructEvent(e, t, today)
+		event := strToStructEvent(e, t, today, markers)
 		dtStart := time.Unix(event.UnixStart, 0)
 		dtEnd := time.Unix(event.UnixEnd, 0)
 
