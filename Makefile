@@ -1,7 +1,7 @@
 BINARY_NAME := jsoon
 BUILD_DIR := bin
 
-.PHONY: all build prepare_test_data test_unit test_emit test_validate test_limit test_file test_lookahead test_pipeline test_info test_all clean
+.PHONY: all build prepare_test_data test_unit test_emit test_validate test_limit test_file test_lookahead test_pipeline test_info test_all clean web-up web-down
 
 all: build
 
@@ -10,6 +10,15 @@ build:
 	@echo "Building $(BINARY_NAME)..."
 	@go build -o $(BUILD_DIR)/$(BINARY_NAME) cmd/j-soon/main.go
 	@echo "Build complete: $(BUILD_DIR)/$(BINARY_NAME)"
+
+# Web Showcase targets
+web-up:
+	@echo "Starting Web Showcase..."
+	@docker compose -f _compose_web.yaml up --build -d
+
+web-down:
+	@echo "Stopping Web Showcase..."
+	@docker compose -f _compose_web.yaml down
 
 prepare_test_data:
 	@echo "Preparing relative test data..."

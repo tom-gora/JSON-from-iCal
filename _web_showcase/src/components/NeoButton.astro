@@ -1,0 +1,12 @@
+---
+const {className, svgString, ...rest} = Astro.props;
+---
+
+
+<button 
+  class:list={className}
+  {...rest}>
+  {svgString && <Fragment set:html={svgString} />}
+  <slot /> 
+</button>
+

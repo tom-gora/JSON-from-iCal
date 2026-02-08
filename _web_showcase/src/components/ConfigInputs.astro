@@ -1,3 +1,18 @@
+---
+import NeoButton from '../components/NeoButton.astro';
+
+const squareIconSize = 22
+const closeSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="${squareIconSize}" height="${squareIconSize}" viewBox="0 0 24 24" {...props}>
+	<path fill="currentColor" d="M20 6.91L17.09 4L12 9.09L6.91 4L4 6.91L9.09 12L4 17.09L6.91 20L12 14.91L17.09 20L20 17.09L14.91 12z" />
+</svg>`
+
+const helpSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="${squareIconSize}" height="${squareIconSize}" viewBox="0 0 640 1408" {...props}>
+	<path fill="currentColor" d="M640 1216v128q0 26-19 45t-45 19H64q-26 0-45-19t-19-45v-128q0-26 19-45t45-19h64V768H64q-26 0-45-19T0 704V576q0-26 19-45t45-19h384q26 0 45 19t19 45v576h64q26 0 45 19t19 45M512 64v192q0 26-19 45t-45 19H192q-26 0-45-19t-19-45V64q0-26 19-45t45-19h256q26 0 45 19t19 45" />
+</svg>`
+
+const props = Astro.props
+
+---
 <style>
 #inputs-panel {
   display: flex;
@@ -86,13 +101,14 @@
     <label class="font-black uppercase text-sm whitespace-nowrap">
       Template:
     </label>
-    <div class="w-full lg:flex-grow flex items-center justify-end gap-2">
-      <button 
+    <div class="w-full lg:flex-grow flex items-center justify-end gap-4">
+      <NeoButton 
         type="button" 
         id="template-help-btn"
         class="neo-button-sm aspect-square grid items-center bg-white text-black dark:bg-neo-dark dark:text-white"
         title="Template Help"
-      >?</button>
+        svgString={helpSVG}
+      />
       <input
         type="text"
         id="template-input"
@@ -129,7 +145,11 @@
 <dialog id="template-help-dialog" class="neo-border neo-shadow-lg p-8 bg-white dark:bg-neo-dark text-black dark:text-white max-w-lg fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop:bg-black/70">
   <div class="flex justify-between items-start mb-6 gap-8">
     <h2 class="text-2xl font-black uppercase italic text-black dark:text-white">Date Templating</h2>
-    <button id="close-help-btn" class="neo-button-sm !bg-[#dd8181] py-1 bg-neo-pink text-black">×</button>
+    <NeoButton 
+      id="close-help-btn"
+      class="neo-button-sm close"
+      svgString={closeSVG}>
+    </NeoButton>
   </div>
   
   <div class="space-y-4 font-bold overflow-y-auto max-h-[60vh] pr-4">

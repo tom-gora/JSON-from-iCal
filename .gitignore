@@ -6,7 +6,8 @@
 #
 # Binaries for programs and plugins
 /bin/
-jfi
+/bin/jsoon
+jsoon
 *.exe
 *.exe~
 *.dll

@@ -1,0 +1,13 @@
+services:
+  jsoon-web-showcase:
+    build:
+      context: .
+      dockerfile: _Dockerfile.web
+    ports:
+      - "4322:4322"
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -6,6 +6,9 @@
   --color-neo-pink: #e191b8;
   --color-neo-purple: #7a4c63;
   --color-neo-dark: #1a1e24;
+  --color-neo-green: #4c7a63;
+  --color-neo-red-strong: #d96262;
+  --color-neo-red: #dd8181;
 
   --shadow-neo: 4px 4px 0px 0px rgba(0, 0, 0, 1);
   --shadow-neo-lg: 8px 8px 0px 0px rgba(0, 0, 0, 1);
@@ -43,34 +46,45 @@
 }
 
 .neo-shadow {
-  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
 }
 
 .neo-shadow-lg {
-  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1) !important;
+  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
 }
 
 .neo-button {
   @apply px-6 py-3 font-black uppercase tracking-wider active:translate-x-1 active:translate-y-1 active:shadow-none transition-all;
   border-width: 4px;
-  border-color: black !important;
-  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+  border-color: black;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
 }
 
 .neo-button-sm {
   @apply px-2 py-0 font-black uppercase tracking-wider active:translate-x-1 active:translate-y-1 active:shadow-none transition-all;
+  flex-shrink: 0;
   border-width: 4px;
+  border-color: black;
   color: black;
-  background-color: #4c7a63;
-  border-color: black !important;
-  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+  background-color: var(--color-neo-green);
+  border-color: black;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+
+  &.close {
+    aspect-ratio: 1/1;
+    background-color: var(--color-neo-red-strong);
+  }
 }
 
 .neo-input {
   @apply px-4 py-2 bg-white text-black dark:bg-neo-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-neo-pink;
   border-width: 4px;
   border-color: black !important;
-  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1) !important;
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.error-box {
+  background-color: var(--color-neo-red);
 }
 
 body {

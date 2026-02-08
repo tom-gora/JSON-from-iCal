@@ -11,17 +11,13 @@
   "dependencies": {
     "@astrojs/node": "^9.5.2",
     "@astrojs/svelte": "^7.2.5",
-    "@astrojs/tailwind": "^6.0.2",
-    "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.1",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.563.0",
     "prismjs": "^1.30.0",
-    "svelte": "^5.49.2",
-    "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.1.18"
+    "svelte": "^5.49.2"
   },
   "devDependencies": {
-    "@types/node": "^25.2.0"
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/node": "^22.13.1",
+    "tailwindcss": "^4.1.18"
   }
 }

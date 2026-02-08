@@ -1,0 +1,17 @@
+.git
+.gitignore
+node_modules
+_web_showcase/node_modules
+dist
+_web_showcase/dist
+_web_showcase/.astro
+bin
+obj
+*.log
+.DS_Store
+.vscode
+README.md
+LICENSE
+_assets
+test_data
+example_emit_notifications.sh

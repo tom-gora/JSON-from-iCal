@@ -4,8 +4,10 @@ import { runJSoon } from "../../lib/jsoon";
 export const POST: APIRoute = async ({ request }) => {
   try {
     const { urls, options } = await request.json();
-    const data = runJSoon(urls, options);
-    return new Response(JSON.stringify(data), {
+    const isVerbose = process.env.JSOON_WEB_VERBOSE === "true";
+    const result = await runJSoon(urls, options);
+    
+    return new Response(JSON.stringify({ ...result, verbose: isVerbose }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

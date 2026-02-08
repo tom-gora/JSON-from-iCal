@@ -41,7 +41,7 @@ html.dark #json-wrapper.active {
     &::before {
       content: "";
       position: absolute;
-      top: 3.5rem;
+      top: 5rem;
       bottom: 0;
       right: 0;
       width: 5rem;
@@ -52,6 +52,9 @@ html.dark #json-wrapper.active {
       );
     }
   }
+}
+pre {
+  margin-top: 2rem;
 }
 
 code[class*="language-"],
