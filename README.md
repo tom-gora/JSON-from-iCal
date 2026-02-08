@@ -2,10 +2,10 @@
   <img disabled width="90%" src="./_assets/header.svg" alt="j-soon"><br>  
 </p>  
 
-![fun-with-skeumorphics](./_assets/image.png)  
-<br><br>  
-
 **J-SOON just produces JSON with your upcoming calendar events. Nothing more. UNIX philosphy. Period.**  
+
+![illustration-eye-catcher](./_assets/jsoon.png)  
+<br>  
 
 This project is a utility that extracts upcoming events from iCal calendar files (.ics) and outputs into JSON format. It is made to be scriptable to fit into your pipeline, indifferent to how the resulting data is consumed. It can take stdin string and both local and remote iCal files as declared in basic config file. It outputs json either to stdout or to a default / selected location .json file.  
 
