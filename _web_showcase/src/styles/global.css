@@ -2,13 +2,35 @@
 
 @variant dark (&:where(.dark, .dark *));
 
+@property --iconSize {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 28px;
+}
+
+@media (width <= 1024px) {
+  @property --iconSize {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 24px;
+  }
+}
+
+@media (width <= 768px) {
+  @property --iconSize {
+    syntax: "<length>";
+    inherits: true;
+    initial-value: 16px;
+  }
+}
+
 @theme {
   --color-neo-pink: #e191b8;
   --color-neo-purple: #7a4c63;
   --color-neo-dark: #1a1e24;
   --color-neo-green: #4c7a63;
-  --color-neo-red-strong: #d96262;
   --color-neo-red: #dd8181;
+  --color-neo-red-strong: #d96262;
 
   --shadow-neo: 4px 4px 0px 0px rgba(0, 0, 0, 1);
   --shadow-neo-lg: 8px 8px 0px 0px rgba(0, 0, 0, 1);
@@ -37,6 +59,12 @@
       opacity: 0;
     }
   }
+}
+
+nav button {
+  height: 100%;
+  aspect-ratio: 1/1;
+  flex-shrink: 0;
 }
 
 /* Force pitch black borders and shadows for both themes */
@@ -70,6 +98,11 @@
   border-color: black;
   box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
 
+  &.default {
+    @apply bg-white text-black dark:bg-neo-dark dark:text-white;
+    aspect-ratio: 1/1;
+  }
+
   &.close {
     aspect-ratio: 1/1;
     background-color: var(--color-neo-red-strong);
@@ -79,7 +112,7 @@
 .neo-input {
   @apply px-4 py-2 bg-white text-black dark:bg-neo-dark dark:text-white focus:outline-none focus:ring-2 focus:ring-neo-pink;
   border-width: 4px;
-  border-color: black !important;
+  border-color: black;
   box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
 }
 
